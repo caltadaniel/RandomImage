@@ -16,7 +16,9 @@ using System.Windows.Shapes;
 
 namespace RandomImageGenerator
 {
-    using System.Reflection;
+	using Microsoft.Win32;
+	using System.IO;
+	using System.Reflection;
     using System.Windows.Media;
     /// <summary>
     /// Logica di interazione per MainWindow.xaml
@@ -55,8 +57,14 @@ namespace RandomImageGenerator
 		public MainWindow()
         {
             InitializeComponent();
-
-        }
+			ComboBoxItem cmbItem1 = new ComboBoxItem();
+			cmbItem1.Content = "White";
+			backgroundCombobox.Items.Add(cmbItem1);
+			ComboBoxItem cmbItem2 = new ComboBoxItem();
+			cmbItem2.Content = "Black";
+			backgroundCombobox.Items.Add(cmbItem2);
+			backgroundCombobox.SelectedIndex = 1;
+		}
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -125,7 +133,8 @@ namespace RandomImageGenerator
 				if (dotDiameters >= minimumDiameter && dotDiameters <= maximumDiameter)
 				{
 					//ok, execute the algorithms
-					this.Draw(numberOfPoints, dotDiameters, randomizeDiamaters.IsChecked ?? false, verticalMirror.IsChecked ?? false, horizontalMirror.IsChecked ?? false);
+					ComboBoxItem mycbi = (ComboBoxItem)backgroundCombobox.SelectedValue;
+					this.Draw(numberOfPoints, dotDiameters, randomizeDiamaters.IsChecked ?? false, verticalMirror.IsChecked ?? false, horizontalMirror.IsChecked ?? false, mycbi.Content.ToString());
 				}
 				else
 				{
@@ -138,14 +147,27 @@ namespace RandomImageGenerator
 			}
 		}
 
-		private void Draw(int points, double diameter, bool randomizeDiameter, bool mirrorVertical, bool mirrorHorizontal)
+		private void Draw(int points, double diameter, bool randomizeDiameter, bool mirrorVertical, bool mirrorHorizontal, string bgColor)
 		{
 			double tempDiameter = diameter;
 			int xPos;
 			int yPos;
 			using (DrawingContext dc = this.drawingGroup.Open())
 			{
-				dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
+				Brush br;
+				switch (bgColor)
+				{
+					case "White":
+						br = Brushes.White;
+						break;
+					case "Black":
+						br = Brushes.Black;
+						break;
+					default:
+						br = Brushes.Black;
+						break;
+				}
+				dc.DrawRectangle(br, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
 				for (int i = 0; i < points; i++)
 				{
 					if (randomizeDiameter)
@@ -193,6 +215,38 @@ namespace RandomImageGenerator
 
 		private void Window_Closed(object sender, EventArgs e)
 		{
+
+		}
+
+		public void SaveDrawingToFile(Drawing drawing, string fileName, double scale)
+		{
+			var drawingImage = new Image { Source = new DrawingImage(drawing) };
+			var width = drawing.Bounds.Width * scale;
+			var height = drawing.Bounds.Height * scale;
+			drawingImage.Arrange(new Rect(0, 0, width, height));
+
+			var bitmap = new RenderTargetBitmap((int)width, (int)height, 96, 96, PixelFormats.Pbgra32);
+			bitmap.Render(drawingImage);
+
+			var encoder = new PngBitmapEncoder();
+			encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+			using (var stream = new FileStream(fileName, FileMode.Create))
+			{
+				encoder.Save(stream);
+			}
+		}
+		private void exportButton_Click(object sender, RoutedEventArgs e)
+		{
+			SaveFileDialog saveFile = new SaveFileDialog();
+			saveFile.Filter = "Jpeg Image | *.jpg | Bitmap Image | *.bmp | Gif Image | *.gif";
+			saveFile.Title = "Save canvas";
+			saveFile.ShowDialog();
+			if (saveFile.FileName != "")
+			{
+				SaveDrawingToFile(this.drawingGroup, saveFile.FileName, 3.0);
+			}
+				
 
 		}
 	}

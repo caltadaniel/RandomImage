@@ -43,18 +43,31 @@
 				<TextBlock Grid.Column="0" VerticalAlignment="Center">Dots diameter (0.5-10)[px]:</TextBlock>
 				<TextBox Grid.Column="1" HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" Name="diameterTextBox" VerticalAlignment="Center" Text="1" TextAlignment="Right" Width="60"/>
 			</Grid>
+			<Grid Grid.Column="2" Grid.Row="0" Margin="5 0 0 0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<TextBlock Grid.Column="0" VerticalAlignment="Center">Background color:</TextBlock>
+				<ComboBox Name="backgroundCombobox"  Grid.Column="1" HorizontalAlignment="Left" Margin="10 0 10 0"  VerticalAlignment="Top" Width="120"/>
+			</Grid>
+			
 			<CheckBox Name="randomizeDiamaters" Grid.Column="0" Grid.Row="1" Margin="5 5 0 0 ">Randomize dots diameters</CheckBox>
 			<CheckBox Name="verticalMirror" Grid.Column="1" Grid.Row="1" Margin="5 5 0 0 ">Mirror vertical</CheckBox>
 			<CheckBox Name="horizontalMirror" Grid.Column="2" Grid.Row="1" Margin="5 5 0 0 ">Mirror Horizontal</CheckBox>
+			
 		</Grid>
 		<Grid Grid.Row="3" Name="settingsGrid">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<Button Grid.Column="2" Name="generateButton" Margin="10 0 10 0" Height="30" Click="generateButton_Click">
+			<Button Grid.Column="1" Name="generateButton" Margin="10 0 10 0" Height="30" Click="generateButton_Click">
 				Generate and draw
+			</Button>
+			<Button Grid.Column="2" Name="exportButton" Margin="10 0 10 0" Height="30" Click="exportButton_Click" >
+				Save canvas
 			</Button>
 		</Grid>
 
