@@ -44,13 +44,15 @@ namespace RandomImageGenerator
         /// </summary>
         private DrawingGroup drawingGroup;
 
-        private Thread _workerThread;
-
-        private DrawingEngine _myEngine;
+		private int minimumPoints = 1;
+		private int maximumPoints = 100000;
+		private double minimumDiameter = 0.5;
+		private double maximumDiameter = 10;
 
         private Random _random = new Random();
+		private Random _randomDiam = new Random();
 
-        public MainWindow()
+		public MainWindow()
         {
             InitializeComponent();
 
@@ -64,11 +66,10 @@ namespace RandomImageGenerator
 
             // Create an image source that we can use in our image control
             this.imageSource = new DrawingImage(this.drawingGroup);
-            //_myEngine = new DrawingEngine(this.drawingGroup);
-            //_myEngine.SetDelay(2000); // 2000 msec of delay
+            
             Image.Source = this.imageSource;
-            _workerThread = new Thread(ImageThread);
-            _workerThread.Start();
+            //_workerThread = new Thread(ImageThread);
+            //_workerThread.Start();
         }
 
         private void ImageThread()
@@ -85,7 +86,7 @@ namespace RandomImageGenerator
             using (DrawingContext dc = this.drawingGroup.Open())
             {
                 dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
-                for (int i = 0; i < 10000; i++)
+                for (int i = 0; i < 100000; i++)
                 {
                     
                     int xPos = _random.Next(0, (int)RenderWidth);
@@ -114,14 +115,85 @@ namespace RandomImageGenerator
             return result;
         }
 
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            _workerThread.Join();
-        }
+		private void generateButton_Click(object sender, RoutedEventArgs e)
+		{
+			//first check that all the inputs are within the limits
+			int numberOfPoints = Convert.ToInt32(pointsNumberTextBox.Text);
+			double dotDiameters = Convert.ToDouble(diameterTextBox.Text);
+			if (numberOfPoints >= minimumPoints && numberOfPoints <= maximumPoints)
+			{
+				if (dotDiameters >= minimumDiameter && dotDiameters <= maximumDiameter)
+				{
+					//ok, execute the algorithms
+					this.Draw(numberOfPoints, dotDiameters, randomizeDiamaters.IsChecked ?? false, verticalMirror.IsChecked ?? false, horizontalMirror.IsChecked ?? false);
+				}
+				else
+				{
+					MessageBox.Show("The diameter is outside the limits", "Input error", MessageBoxButton.OK);
+				}
+			}
+			else
+			{
+				MessageBox.Show("Number of points are outside the limits", "Input error", MessageBoxButton.OK);
+			}
+		}
 
-        private void UpdateImage(string image)
-        {
-            System.Console.WriteLine(image);
-        }
-    }
+		private void Draw(int points, double diameter, bool randomizeDiameter, bool mirrorVertical, bool mirrorHorizontal)
+		{
+			double tempDiameter = diameter;
+			int xPos;
+			int yPos;
+			using (DrawingContext dc = this.drawingGroup.Open())
+			{
+				dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, RenderWidth, RenderHeight));
+				for (int i = 0; i < points; i++)
+				{
+					if (randomizeDiameter)
+					{
+						tempDiameter = _randomDiam.NextDouble() * diameter;
+					}
+					if (mirrorVertical && mirrorHorizontal)
+					{
+						xPos = _random.Next(0, (int)RenderWidth/2);
+						yPos = _random.Next(0, (int)RenderHeight/2);
+						//first quadrant
+						dc.DrawEllipse(PickBrush(), null, new Point(RenderWidth / 2 - xPos, RenderHeight / 2 + yPos), tempDiameter, tempDiameter);
+						//second
+						dc.DrawEllipse(PickBrush(), null, new Point(RenderWidth / 2 + xPos, RenderHeight / 2 + yPos), tempDiameter, tempDiameter);
+						//third
+						dc.DrawEllipse(PickBrush(), null, new Point(RenderWidth / 2 + xPos, RenderHeight / 2 - yPos), tempDiameter, tempDiameter);
+						//fourth
+						dc.DrawEllipse(PickBrush(), null, new Point(RenderWidth / 2 - xPos, RenderHeight / 2 - yPos), tempDiameter, tempDiameter);
+					}
+					if (mirrorVertical)
+					{
+						xPos = _random.Next(0, (int)RenderWidth / 2);
+						yPos = _random.Next(0, (int)RenderHeight);
+						dc.DrawEllipse(PickBrush(), null, new Point(RenderWidth / 2 - xPos, yPos), tempDiameter, tempDiameter);
+						dc.DrawEllipse(PickBrush(), null, new Point(RenderWidth / 2 + xPos, yPos), tempDiameter, tempDiameter);
+					}
+					if (mirrorHorizontal)
+					{
+						xPos = _random.Next(0, (int)RenderWidth);
+						yPos = _random.Next(0, (int)RenderHeight / 2);
+						dc.DrawEllipse(PickBrush(), null, new Point(xPos, RenderHeight / 2 - yPos), tempDiameter, tempDiameter);
+						dc.DrawEllipse(PickBrush(), null, new Point(xPos, RenderHeight / 2 + yPos), tempDiameter, tempDiameter);
+					}
+					if (!mirrorVertical && !mirrorHorizontal)
+					{
+						xPos = _random.Next(0, (int)RenderWidth);
+						yPos = _random.Next(0, (int)RenderHeight);
+						dc.DrawEllipse(PickBrush(), null, new Point(xPos, yPos), tempDiameter, tempDiameter);
+					}
+
+					
+				}
+			}
+		}
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+
+		}
+	}
 }

@@ -12,3 +12,17 @@ C:\Users\Daniele\Source\Repos\RandomImageGenerator\RandomImageGenerator\RandomIm
 C:\Users\Daniele\Source\Repos\RandomImageGenerator\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.csproj.GenerateResource.Cache
 C:\Users\Daniele\Source\Repos\RandomImageGenerator\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.exe
 C:\Users\Daniele\Source\Repos\RandomImageGenerator\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.pdb
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\bin\Debug\RandomImageGenerator.exe.config
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\bin\Debug\RandomImageGenerator.exe
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\bin\Debug\RandomImageGenerator.pdb
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.csprojResolveAssemblyReference.cache
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\MainWindow.g.cs
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\App.g.cs
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator_MarkupCompile.cache
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator_MarkupCompile.lref
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\MainWindow.baml
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.g.resources
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.Properties.Resources.resources
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.csproj.GenerateResource.Cache
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.exe
+C:\SVN\RandomImage\RandomImageGenerator\RandomImageGenerator\obj\Debug\RandomImageGenerator.pdb
